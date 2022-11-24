@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     float horizontal_move;
     float horizontal_move_speed;
 
+    Animator animator;
+
     void Awake()
     {
         vertical_position = 1;
@@ -22,7 +24,9 @@ public class Player : MonoBehaviour
         vertical_moving = false;
 
         horizontal_move = 0;
-        horizontal_move_speed = 0.2f;
+        horizontal_move_speed = 0.1f;
+
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -58,7 +62,12 @@ public class Player : MonoBehaviour
 
     void MovePlayer()
     {
-        transform.position = new Vector2(transform.position.x + (horizontal_move * horizontal_move_speed), transform.position.y);
+        if (horizontal_move == 0)
+            animator.SetBool("Running", false);
+        else
+            animator.SetBool("Running", true);
+
+        transform.position = new Vector2(Mathf.Clamp(transform.position.x + (horizontal_move * horizontal_move_speed), -8.35f, 8.35f), transform.position.y); //맵에서 가지 못하게 -8.35 ~ 8.35
 
         if (vertical_moving == true)
             return;
